@@ -13,7 +13,7 @@ import android.media.MediaPlayer;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.eyc.mobility.GSMActivity;
+import gsm.eyc.com.GSMActivity;
 import com.hsm.barcode.DecodeResult;
 import com.hsm.barcode.Decoder;
 import com.hsm.barcode.DecoderConfigValues;
