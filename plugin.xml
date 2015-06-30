@@ -9,9 +9,9 @@
 	<license>EYC</license>
 	<keywords>barcodescanner</keywords>
 
-	<js-module src="www/gladiusBarcodeScanner.js">
+	<!--<js-module src="www/gladiusBarcodeScanner.js">
 		<clobbers target="plugins.gladiusBarcodeScanner" />
-	</js-module>
+	</js-module>-->
 
 
 	<!-- android -->
