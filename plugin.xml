@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://cordova.apache.org/ns/plugins/1.0"
 	id="cordova-plugin-gladius-barcode-scanner"
-	version="0.6.1">
+	version="1.0.0">
 
 	<name>GladiusBarcodeScanner</name>
 	<description>Gladius Bar Code Scanner Plugin</description>
@@ -23,6 +23,5 @@
 		</config-file>
 
 		<source-file src="src/android/GladiusBarcodeScanner.java" target-dir="src/com/eyc/plugins" />
-		<source-file src="src/android/GladiusScanReceiver.java" target-dir="src/com/eyc/plugins" />
 	</platform>
 </plugin>

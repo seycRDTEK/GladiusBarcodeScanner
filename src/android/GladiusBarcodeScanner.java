@@ -9,11 +9,11 @@ import org.json.JSONException;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.app.Activity;
 import android.media.MediaPlayer;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import gsm.eyc.com.GSMActivity;
 import com.hsm.barcode.DecodeResult;
 import com.hsm.barcode.Decoder;
 import com.hsm.barcode.DecoderConfigValues;
@@ -21,20 +21,22 @@ import com.hsm.barcode.SymbologyConfig;
 
 public class GladiusBarcodeScanner extends CordovaPlugin {
 	
-	private String TAG = "BarcodeScanner";
+	private static String TAG = "BarcodeScanner";
 	private static final String START_LISTENER = "startBarcodeListener";
 	private static final String STOP_LISTENER = "stopBarcodeListener";
 	private static final String START_SCAN = "startScanning";
     private static final int decodeTimeout = 2000; 
 
 
-	private CallbackContext scanReceiveCb;
-	private Decoder scanDecoder = null;
+	private static CallbackContext scanReceiveCb;
+	private static Decoder scanDecoder = null;
+    
+    private static Activity mActivity = null;
+    
 //	private DecodeResult decodeResult = null;
-	private GladiusScanReceiver scanReceiver = null;
+	//private GladiusScanReceiver scanReceiver = null;
 	
     public static final int barcode=0x7f040000;
-	
 
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -71,7 +73,7 @@ public class GladiusBarcodeScanner extends CordovaPlugin {
 			scanDecoder.enableSymbology(DecoderConfigValues.SymbologyID.SYM_QR);
 			*/
 	        
-			if (this.scanReceiver == null) {
+			/*if (this.scanReceiver == null) {
 	    		Log.d(TAG, "Instantiate Scan Receiver");
 				this.scanReceiver = new GladiusScanReceiver();
 				this.scanReceiver.setCallingListener(this);
@@ -80,9 +82,9 @@ public class GladiusBarcodeScanner extends CordovaPlugin {
 				//ifMiki.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
 				Intent tmp = this.cordova.getActivity().registerReceiver(this.scanReceiver,ifMiki);
 	    		Log.d(TAG, "Scan Receiver created successfully : "+tmp);
-			}
+			}*/
 
-			((GSMActivity)this.cordova.getActivity()).setGladiusScanner(this);
+			//mActivity = this.cordova.getActivity();
 	        return true;
 	    }
 	    else if (START_SCAN.equals(action)){ //possibility to call the scan directly
@@ -98,11 +100,12 @@ public class GladiusBarcodeScanner extends CordovaPlugin {
 	}
 
 	
-	public boolean startScanning(){
-		return startScanning(this.scanReceiveCb);
+	public static boolean startScanning(Activity callingActivity){
+        mActivity = callingActivity;
+		return startScanning(scanReceiveCb);
 	}
 
-    private boolean startScanning(CallbackContext scanReceivedCb) {  
+    private static boolean startScanning(CallbackContext scanReceivedCb) {
 
 		Log.d(TAG, "Start scanning");
 		if (scanDecoder == null) {
@@ -133,7 +136,7 @@ public class GladiusBarcodeScanner extends CordovaPlugin {
 			
 			//send barcode result.
 			Intent sendIntent = BarcodeScanner.getBroadCastIntent(PluginResult.Status.OK, decodedata, true);
-			LocalBroadcastManager.getInstance(this.cordova.getActivity().getApplicationContext()).sendBroadcast(sendIntent);
+			LocalBroadcastManager.getInstance(mActivity.getApplicationContext()).sendBroadcast(sendIntent);
 			return true;
     	}
     	else {
@@ -156,6 +159,6 @@ public class GladiusBarcodeScanner extends CordovaPlugin {
  			scanDecoder.disconnectFromDecoder();
 		}
  		scanDecoder = null;
- 		this.cordova.getActivity().unregisterReceiver(scanReceiver);
+        //this.cordova.getActivity().unregisterReceiver(scanReceiver);
      }
 }
